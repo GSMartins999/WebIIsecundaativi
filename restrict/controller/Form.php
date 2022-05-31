@@ -1,62 +1,83 @@
 <?php
-
 class Form
 {
   private $message = "";
   private $error = "";
-
-  public function __construct(){
+  public function __construct()
+  {
     Transaction::open();
   }
   public function controller()
   {
-    $form = new Template("view/Form.html");
-    $form-> set("id", "");
-    $form -> set("nome", "");
-    $form -> set("email", "");
-    $form -> set("telefone", "");
+    $form = new Template("restrict/view/form.html");
+    $form->set("id", "");
+    $form->set("nome", "");
+    $form->set("titulos", "");
+    $form->set("estado" , "");
     $this->message = $form->saida();
   }
-  public function salvar(){
-    if(isset($_POST['nome']) && isset($_POST['email']) && isset($_POST['telefone'])){
-    try{
-      $conexao = Transaction::get();
-      $contatos = new Crud('contatos');
-      $nome = $conexao->quote($_POST['nome']);
-      $email = $conexao->quote($_POST['email']);
-      $telefone = $conexao->quote($_POST['telefone']);
-      if(empty( $_POST["id"])){
-        $contatos->insert("nome,email,telefone", "$nome, $email, $telefone");
-      }else{
-        $id = $conexao->quote($_POST['id']);
-        $contatos->update("nome =  $nome, email = $email, telefone = $telefone", "id=$id" );
-      }
-    }catch(Exception $e){
-      echo $e->getMessage();
-    }
-    }
-  }
-  public function editar(){
-    if(isset($_GET['id'])){
+  public function salvar()
+  {
+    if (isset($_POST['nomes']) && isset($_POST['titulos']) && isset($_POST['estado'])){
       try{
         $conexao = Transaction::get();
-        $id = $conexao->quote($_GET['id']);
-        $contatos = new Crud('contatos');
-        $resultado = $contatos->select("*", "id=$id");
-        $form = new Template("view/Form.html");
-        foreach ($resultado[0] as $cod => $valor) {
-          $form->set($cod, $valor);
+        $times = new Crud('times');
+        $nomes = $conexao->quote($_POST['nomes']);
+        $titulos = $conexao->quote($_POST['titulos']);
+        $estado = $conexao->quote($_POST['estado']);
+        if(empty($_POST['id'])) {
+          $times->insert("nome,titulos,estado", "$nomes, $titulos, $estado");
+        }else{
+          $id = $conexao->quote($_POST['id']);
+          $times->update("nome=$nomes, titulos=$titulos, estado=$estado", "id=$id");
         }
-        $this->message = $form->saida();
-      }catch (Exception $e) {
-        echo $e->getMessage();
+        $this->message = $times->getMessage();
+        $this->error = $times->getError();
+      } catch (Exception $e) {
+        $this->message = $e->getMessage();
+        $this->error = true;
       }
     }
   }
-
+  public function editar()
+  {
+    if (isset($_GET['id'])) {
+      try {
+        $conexao = Transaction::get();
+        $id = $conexao->quote($_GET['id']);
+        $times = new Crud('times');
+        $resultado = $times->select("*", "id=$id");
+        if(!$times->getError()){
+          $form = new Template("view/form.html");
+          foreach ($resultado[0] as $cod => $valor) {
+            $form->set($cod, $valor);
+        }
+        $this->message = $form->saida();
+      } else {
+        $this->message = $times->getMessage();
+        $this->error = true;      
+      }
+    } catch (Exception $e) {
+      $this->message = $e->getMessage();
+      $this->error = true;
+    }
+  }
+} 
   public function getMessage()
   {
-    return $this->message;
+    if (is_string($this->error)){
+      return $this->message;
+    } else{
+      $msg = new Template("view/msg.html");
+      if ($this->error) {
+        $msg->set("cor", "danger");
+      } else {
+        $msg->set("cor", "success");
+      }
+      $msg->set("msg", $this->message);
+      $msg->set("uri", "?class=Tabela");
+      return $msg->saida();
+    }
   }
   public function __destruct()
   {

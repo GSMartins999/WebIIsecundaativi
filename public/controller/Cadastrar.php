@@ -18,7 +18,7 @@
                     $nome = $conexao->quote($_POST["nome"]);
                     $email = $conexao->quote($_POST["email"]);
                     $senha = $conexao->quote(sha1($_POST["senha"]));
-                    $crud = new Crud("usuario");
+                    $crud = new Crud("Usuario");
                     $crud->insert(
                         "nome, email, senha",
                         "{$nome}, {$email}, {$senha}"
@@ -46,7 +46,7 @@
                     $msg->set("cor", "success");
                 }
                 $msg->set("msg", $this->message);
-                $msg->set("uri", "/modelo/?class=Login");
+                $msg->set("uri", "/Giovanni2/?class=Login");
                 return $msg->saida();    
             }    
         }

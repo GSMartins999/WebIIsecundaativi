@@ -34,7 +34,6 @@ class Template
     $saida = $inicioGeral . $saidaTrecho . $fimGeral;
     return $saida;
   }
-
   public function saida()
   {
     if (!file_exists($this->arquivo)) {
@@ -49,7 +48,7 @@ class Template
             $tag = "{{$chave}}";
             $saida = str_replace($tag, $valor, $saida);
           }
-        }
+        }       
       }
       return $saida;
     }

@@ -1,18 +1,18 @@
-<form method="POST" action="?class=Form&method=salvar">
-  <input type="hidden" name="id" value="{id}">
+<form method="POST" action="?class=Form&&method=salvar">
+  <input type="hidden" name="id" value="{id}"/>
   <div>
-    <label for="nome"> Nome </label>
-    <input type="text" name="nome" id="nome" required value="{nome}" />
+    <label for="nomes">Nomes: </label>
+    <input type="text" name="nomes" id="nomes" required value="{nome}" />
   </div>
   <div>
-    <label for="email"> E-mail </label>
-    <input type="email" name="email" id="email" required value="{email}"/>
+      <label for="titulos">Titulos: </label>
+      <input type="number" name="titulos" id="titulos" required value={titulos} />
   </div>
   <div>
-    <label for="telefone"> Telefone </label>
-    <input type="telefone" name="telefone" id="telefone" required value="{telefone}"/>
+      <label for="estado">Estado: </label>
+      <input type="text" name="estado" id="estado" required value ="{estado}" />
   </div>
-    <div>
+  <div> 
         <button type="submit"> salvar </button>
     </div>
 </form>

@@ -3,51 +3,54 @@ class Tabela
 {
   private $message = "";
   private $error = "";
-  public function __construct(){
+  public function __construct()
+  {
     Transaction::open();
   }
   public function controller()
   {
-   try{
-    Transaction::get();
-    $contatos = new Crud("contatos");
-    $resultado = $contatos->select();
-    $tabela = new Template("view/Tabela.html");
-    if (is_array($resultado)) {
-      $tabela->set("linha", $resultado);
-      $this->message = $tabela->saida();
-    }else {
-      $this->message = $contatos->getMessage();
-      $this->error = $contatos->getError();
+    try {
+      Transaction::get();
+      $times = new Crud("times");
+      $resultado = $times->select();
+      $tabela = new Template("view/tabela.html");
+      if (is_array($resultado)) {
+        $tabela->set("linha", $resultado);
+        $this->message = $tabela->saida();
+      } else {
+        $this->message = $times->getMessage();
+        $this->error = $times->getError();
+      }
+    } catch (Exception $e) {
+      $this->message = $e->getMessage();
+      $this->error = true;
     }
-   }catch (Exception $e) {
-    $this->message = $e->getMessage();
-    $this->error = true;
   }
-  }
-  public function remover(){
-    if (isset($_GET["id"])){
-      try{
+  public function remover()
+  {
+    if (isset($_GET["id"])) {
+      try {
         $conexao = Transaction::get();
         $id = $conexao->quote($_GET["id"]);
-        $contatos = new Crud("contatos");
-        $contatos->delete("id=$id");
-      }catch(Exeption $e){
+        $times = new Crud("times");
+        $times->delete("id=$id");
+        $this->message = $times->getMessage();
+        $this->error = $times->getError();
+      } catch (Exception $e) {
         $this->message = $e->getMessage();
         $this->error = true;
       }
-    }else {
+    } else {
       $this->message = "Faltando parâmetro!";
       $this->error = true;
     }
   }
-
   public function getMessage()
   {
     if (is_string($this->error)) {
       return $this->message;
     } else {
-      $msg = new Template("shared/view/msg.html");
+      $msg = new Template("restrict/view/msg.html");
       if ($this->error) {
         $msg->set("cor", "danger");
       } else {
@@ -62,5 +65,4 @@ class Tabela
   {
     Transaction::close();
   }
-  
 }
