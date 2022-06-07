@@ -13,7 +13,7 @@ class Tabela
       Transaction::get();
       $times = new Crud("times");
       $resultado = $times->select();
-      $tabela = new Template("view/tabela.html");
+      $tabela = new Template("restrict/view/Tabela.html");
       if (is_array($resultado)) {
         $tabela->set("linha", $resultado);
         $this->message = $tabela->saida();
@@ -45,6 +45,7 @@ class Tabela
       $this->error = true;
     }
   }
+  
   public function getMessage()
   {
     if (is_string($this->error)) {

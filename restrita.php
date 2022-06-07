@@ -9,8 +9,7 @@ $pastas = array(
     "restrict/model"
 );
 foreach ($pastas as $pastas){
-    echo
-        $arquivo = "({$pastas}/{$nomeArq})";
+        $arquivo = "{$pastas}/{$nomeArq}";
         if (file_exists($arquivo)){
             require_once $arquivo;
         }

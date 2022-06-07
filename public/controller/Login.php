@@ -17,7 +17,7 @@ class Login{
                 $conexao = Transaction::get();
                 $email = $conexao->quote($_POST["email"]);
                 $senha = $conexao->quote(sha1($_POST["senha"]));
-                $crud = new Crud("usuario");
+                $crud = new Crud("Usuario");
                 $usuario = $crud->select(
                     "*",
                     "email={$email} AND senha={$senha}"
