@@ -48,7 +48,7 @@ class Form
         $times = new Crud('times');
         $resultado = $times->select("*", "id=$id");
         if(!$times->getError()){
-          $form = new Template("restrict/view/form.html");
+          $form = new Template("restrict/view/Form.html");
           foreach ($resultado[0] as $cod => $valor) {
             $form->set($cod, $valor);
         }
